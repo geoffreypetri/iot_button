@@ -1,2 +1,8 @@
-/.vscode
+# Build directory
 /build
+
+# IDE Configuration Files
+/.vscode
+
+# General
+.DS_Store
