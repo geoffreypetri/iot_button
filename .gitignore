@@ -1,6 +1,9 @@
 # Build directory
 /build
 
+# SDK Configuration files
+sdkconfig*
+
 # IDE Configuration Files
 /.vscode
 
