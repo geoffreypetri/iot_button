@@ -26,7 +26,7 @@
 static const char *TAG = "button";
 
 // Event loop
-esp_event_loop_handle_t button_event_loop = NULL;
+button_event_loop = NULL;
 
 /* Event source task related definitions */
 ESP_EVENT_DEFINE_BASE(BUTTON_EVENTS);
