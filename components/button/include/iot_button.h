@@ -53,7 +53,7 @@ typedef enum {
  */
 typedef struct {
   gpio_num_t gpio_num;
-  int repeat;
+  uint8_t repeat;
 } button_event_data_t;
 
 /**
