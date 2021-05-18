@@ -46,6 +46,15 @@ typedef enum {
   BUTTON_EVENT_MAX,
   BUTTON_NONE_PRESS,
 } button_event_t;
+  
+/**
+ * @brief Button event data
+ *
+ */
+typedef struct {
+  gpio_num_t gpio_num;
+  int repeat;
+} button_event_data_t;
 
 /**
  * @brief Supported button type
