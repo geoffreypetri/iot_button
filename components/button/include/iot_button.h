@@ -16,6 +16,7 @@
 
 #include "button_adc.h"
 #include "button_gpio.h"
+#include "esp_event.h"
 
 #ifdef __cplusplus
 extern "C" {
