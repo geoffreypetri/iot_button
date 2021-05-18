@@ -72,6 +72,10 @@ static bool g_is_timer_running = false;
 static void button_handler(button_dev_t *btn)
 {
   uint8_t read_gpio_level = btn->hal_button_Level(btn->usr_data);
+  button_event_data_t event_data = {
+    .gpio_num = btn->usr_data,
+    .repeat = btn->repeat
+  };
 
   /** ticks counter working.. */
   if ((btn->state) > 0) {
@@ -106,12 +110,14 @@ static void button_handler(button_dev_t *btn)
     if (btn->button_level != btn->active_level) {
       btn->event = (uint8_t)BUTTON_PRESS_UP;
       CALL_EVENT_CB(BUTTON_PRESS_UP);
+      POST_EVENT(BUTTON_PRESS_UP, event_data);
       btn->ticks = 0;
       btn->state = 2;
 
     } else if (btn->ticks > LONG_TICKS) {
       btn->event = (uint8_t)BUTTON_LONG_PRESS_START;
       CALL_EVENT_CB(BUTTON_LONG_PRESS_START);
+      POST_EVENT(BUTTON_LONG_PRESS_START, event_data);
       btn->state = 5;
     }
     break;
@@ -122,15 +128,18 @@ static void button_handler(button_dev_t *btn)
       CALL_EVENT_CB(BUTTON_PRESS_DOWN);
       btn->repeat++;
       CALL_EVENT_CB(BUTTON_PRESS_REPEAT); // repeat hit
+      POST_EVENT(BUTTON_PRESS_REPEAT, event_data);
       btn->ticks = 0;
       btn->state = 3;
     } else if (btn->ticks > SHORT_TICKS) {
       if (btn->repeat == 1) {
         btn->event = (uint8_t)BUTTON_SINGLE_CLICK;
         CALL_EVENT_CB(BUTTON_SINGLE_CLICK);
+        POST_EVENT(BUTTON_SINGLE_CLICK, event_data);
       } else if (btn->repeat == 2) {
         btn->event = (uint8_t)BUTTON_DOUBLE_CLICK;
         CALL_EVENT_CB(BUTTON_DOUBLE_CLICK); // repeat hit
+        POST_EVENT(BUTTON_DOUBLE_CLICK, event_data);
       }
       btn->state = 0;
     }
@@ -140,6 +149,7 @@ static void button_handler(button_dev_t *btn)
     if (btn->button_level != btn->active_level) {
       btn->event = (uint8_t)BUTTON_PRESS_UP;
       CALL_EVENT_CB(BUTTON_PRESS_UP);
+      POST_EVENT(BUTTON_PRESS_UP, event_data);
       if (btn->ticks < SHORT_TICKS) {
         btn->ticks = 0;
         btn->state = 2; //repeat press
@@ -154,9 +164,11 @@ static void button_handler(button_dev_t *btn)
       //continue hold trigger
       btn->event = (uint8_t)BUTTON_LONG_PRESS_HOLD;
       CALL_EVENT_CB(BUTTON_LONG_PRESS_HOLD);
+      POST_EVENT(BUTTON_LONG_PRESS_HOLD, event_data);
     } else { //releasd
       btn->event = (uint8_t)BUTTON_PRESS_UP;
       CALL_EVENT_CB(BUTTON_PRESS_UP);
+      POST_EVENT(BUTTON_PRESS_UP, event_data);
       btn->state = 0; //reset
     }
     break;
