@@ -25,6 +25,10 @@ extern "C" {
 typedef void (* button_cb_t)(void *);
 typedef void *button_handle_t;
 
+  
+// Event loop
+esp_event_loop_handle_t button_event_loop;
+  
 /**
  * @brief Declaration of the task events family
  *
