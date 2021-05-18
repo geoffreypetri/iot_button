@@ -25,19 +25,25 @@ typedef void (* button_cb_t)(void *);
 typedef void *button_handle_t;
 
 /**
+ * @brief Declaration of the task events family
+ *
+ */
+ESP_EVENT_DECLARE_BASE(BUTTON_EVENTS);
+
+/**
  * @brief Button events
  *
  */
 typedef enum {
-    BUTTON_PRESS_DOWN = 0,
-    BUTTON_PRESS_UP,
-    BUTTON_PRESS_REPEAT,
-    BUTTON_SINGLE_CLICK,
-    BUTTON_DOUBLE_CLICK,
-    BUTTON_LONG_PRESS_START,
-    BUTTON_LONG_PRESS_HOLD,
-    BUTTON_EVENT_MAX,
-    BUTTON_NONE_PRESS,
+  BUTTON_PRESS_DOWN = 0,
+  BUTTON_PRESS_UP,
+  BUTTON_PRESS_REPEAT,
+  BUTTON_SINGLE_CLICK,
+  BUTTON_DOUBLE_CLICK,
+  BUTTON_LONG_PRESS_START,
+  BUTTON_LONG_PRESS_HOLD,
+  BUTTON_EVENT_MAX,
+  BUTTON_NONE_PRESS,
 } button_event_t;
 
 /**
@@ -45,8 +51,8 @@ typedef enum {
  *
  */
 typedef enum {
-    BUTTON_TYPE_GPIO,
-    BUTTON_TYPE_ADC,
+  BUTTON_TYPE_GPIO,
+  BUTTON_TYPE_ADC,
 } button_type_t;
 
 /**
@@ -54,11 +60,11 @@ typedef enum {
  *
  */
 typedef struct {
-    button_type_t type;                           /**< button type, The corresponding button configuration must be filled */
-    union {
-        button_gpio_config_t gpio_button_config; /**< gpio button configuration */
-        button_adc_config_t adc_button_config;   /**< adc button configuration */
-    }; /**< button configuration */
+  button_type_t type;                           /**< button type, The corresponding button configuration must be filled */
+  union {
+    button_gpio_config_t gpio_button_config; /**< gpio button configuration */
+    button_adc_config_t adc_button_config;   /**< adc button configuration */
+  }; /**< button configuration */
 } button_config_t;
 
 /**
