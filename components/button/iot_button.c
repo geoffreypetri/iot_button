@@ -26,7 +26,7 @@
 static const char *TAG = "button";
 
 // Event loop
-esp_event_loop_handle_t button_event_loop;
+esp_event_loop_handle_t button_event_loop = NULL;
 
 /* Event source task related definitions */
 ESP_EVENT_DEFINE_BASE(BUTTON_EVENTS);
@@ -58,12 +58,13 @@ static button_dev_t *g_head_handle = NULL;
 static esp_timer_handle_t g_button_timer_handle;
 static bool g_is_timer_running = false;
 
-#define TICKS_INTERVAL    CONFIG_BUTTON_PERIOD_TIME_MS
-#define DEBOUNCE_TICKS    CONFIG_BUTTON_DEBOUNCE_TICKS //MAX 8
-#define SHORT_TICKS       (CONFIG_BUTTON_SHORT_PRESS_TIME_MS /TICKS_INTERVAL)
-#define LONG_TICKS        (CONFIG_BUTTON_LONG_PRESS_TIME_MS /TICKS_INTERVAL)
+#define TICKS_INTERVAL        CONFIG_BUTTON_PERIOD_TIME_MS
+#define DEBOUNCE_TICKS        CONFIG_BUTTON_DEBOUNCE_TICKS //MAX 8
+#define SHORT_TICKS           (CONFIG_BUTTON_SHORT_PRESS_TIME_MS /TICKS_INTERVAL)
+#define LONG_TICKS            (CONFIG_BUTTON_LONG_PRESS_TIME_MS /TICKS_INTERVAL)
 
-#define CALL_EVENT_CB(ev)   if(btn->cb[ev])btn->cb[ev](btn)
+#define CALL_EVENT_CB(ev)     if(btn->cb[ev])btn->cb[ev](btn)
+#define POST_EVENT(evt, data) ESP_ERROR_CHECK(esp_event_post_to(button_event_loop, BUTTON_EVENTS, evt, &data, sizeof(data), portMAX_DELAY));
 
 /**
   * @brief  Button driver core function, driver state machine.
@@ -236,6 +237,20 @@ button_handle_t iot_button_create(const button_config_t *config)
 {
   esp_err_t ret = ESP_OK;
   button_dev_t *btn = NULL;
+  
+  if (NULL == button_event_loop) {
+    esp_event_loop_args_t button_event_loop_args = {
+      .queue_size = 5,
+      .task_name = "button_loop_task", // task will be created
+      .task_priority = uxTaskPriorityGet(NULL),
+      .task_stack_size = 2048,
+      .task_core_id = tskNO_AFFINITY
+    };
+
+    // Create the event loops
+    ESP_ERROR_CHECK(esp_event_loop_create(&button_event_loop_args, &button_event_loop));
+  }
+  
   switch (config->type) {
   case BUTTON_TYPE_GPIO: {
     const button_gpio_config_t *cfg = &(config->gpio_button_config);
