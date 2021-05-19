@@ -24,9 +24,6 @@ extern "C" {
 
 typedef void (* button_cb_t)(void *);
 typedef void *button_handle_t;
-
-// Event loop
-esp_event_loop_handle_t button_event_loop;
   
 /**
  * @brief Declaration of the task events family
@@ -73,7 +70,7 @@ typedef enum {
  *
  */
 typedef struct {
-  button_type_t type;                           /**< button type, The corresponding button configuration must be filled */
+  button_type_t type;                        /**< button type, The corresponding button configuration must be filled */
   union {
     button_gpio_config_t gpio_button_config; /**< gpio button configuration */
     button_adc_config_t adc_button_config;   /**< adc button configuration */

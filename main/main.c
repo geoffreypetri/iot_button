@@ -66,7 +66,7 @@ void app_main(void)
 
   button_handle_t btn_h = iot_button_create(&btn_cfg);
 
-  esp_event_handler_register_with(button_event_loop, BUTTON_EVENTS, ESP_EVENT_ANY_ID, &button_event_handler, NULL);
+  esp_event_handler_register(BUTTON_EVENTS, ESP_EVENT_ANY_ID, &button_event_handler, NULL);
 
 
    
