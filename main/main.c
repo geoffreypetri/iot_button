@@ -14,6 +14,9 @@
 #include "esp_event.h"
 #include "iot_button.h"
 
+#define BUTTON_BOOT_IO           GPIO_NUM_0
+#define BUTTON_BOOT_ACTIVE_LEVEL 0
+
 static const char* TAG = "main";
 
 void button_event_handler(void* event_handler_arg, esp_event_base_t event_base, int32_t event_id, void* event_data)
@@ -56,8 +59,8 @@ void app_main(void)
   button_config_t btn_cfg = {
     .type = BUTTON_TYPE_GPIO,
     .gpio_button_config = {
-      .gpio_num = 0,
-      .active_level = 0
+      .gpio_num = BUTTON_BOOT_IO,
+      .active_level = BUTTON_BOOT_ACTIVE_LEVEL
     }
   };
 
