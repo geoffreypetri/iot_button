@@ -1,6 +1,6 @@
 # IOT Button
 
-IOT Button component from Espressif's [esp-iot-solution](https://github.com/espressif/esp-iot-solution/tree/master/components/button) with events loop !
+IOT Button component for esp32/esp32s2 from Espressif's [esp-iot-solution](https://github.com/espressif/esp-iot-solution/tree/master/components/button) with events loop.
 
 Example code for simplicity.
 
