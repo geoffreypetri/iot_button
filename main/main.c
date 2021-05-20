@@ -68,6 +68,4 @@ void app_main(void)
 
   esp_event_handler_register(BUTTON_EVENTS, ESP_EVENT_ANY_ID, &button_event_handler, NULL);
 
-
-   
 }
